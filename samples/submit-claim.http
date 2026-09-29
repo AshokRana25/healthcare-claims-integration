@@ -1,0 +1,28 @@
+@host = http://localhost:5080
+
+### New synthetic claim; repeat unchanged to demonstrate idempotency
+POST {{host}}/api/claims
+Content-Type: application/json
+Idempotency-Key: sample-claim-001
+
+{
+  "source": "sample-client",
+  "externalClaimId": "DEMO-001",
+  "memberId": "SYN-1001",
+  "serviceDate": "2026-09-01",
+  "amount": 250.00,
+  "currency": "USD",
+  "scenario": "Transient"
+}
+
+### Latest 200 claims
+GET {{host}}/api/claims
+
+### Replace claim-id with the returned claim identifier
+GET {{host}}/api/claims/claim-id
+
+### Only dead-letter claims can be replayed
+POST {{host}}/api/claims/claim-id/replay
+Content-Type: application/json
+
+{"reason":"Investigated simulated gateway failure; replay for demonstration"}

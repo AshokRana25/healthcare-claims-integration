@@ -1,0 +1,8 @@
+.git
+**/bin
+**/obj
+**/data
+**/TestResults
+*.db*
+.env
+artifacts

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claims Integration · Operations Console</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<header><a class="brand" href="/">✚ <span>Claims Integration</span></a><span class="environment">SYNTHETIC DATA / LOCAL DEMO</span></header>
+<main>
+  <div class="eyebrow">HEALTHCARE INTEGRATION ENGINEERING</div>
+  <div class="title-row"><div><h1>Every claim. Every step.</h1><p class="intro">Follow a claim from intake to integration, with durable retries and a clear record of every processing decision.</p></div><a class="api-link" href="/openapi/v1.json">OpenAPI specification ↗</a></div>
+  <section class="metrics" aria-label="Claim counts in the latest 200 records">
+    <div><span>Claims received</span><strong id="total">0</strong></div>
+    <div><span>Integrated</span><strong id="integrated">0</strong></div>
+    <div><span>Queued / retrying</span><strong id="pending">0</strong></div>
+    <div><span>Needs attention</span><strong id="attention">0</strong></div>
+  </section>
+  <div class="workspace">
+    <section class="panel intake"><div class="section-label">01 / INTAKE</div><h2>Submit a synthetic claim</h2><p class="muted">Choose a scenario to explore the processing lifecycle.</p>
+      <form id="claim-form">
+        <label for="external">External claim ID</label><input id="external" required maxlength="80">
+        <div class="form-grid"><div><label for="member">Synthetic member</label><input id="member" value="SYN-1001" pattern="SYN-.*" required maxlength="80"></div><div><label for="amount">Amount · USD</label><input id="amount" type="number" value="250.00" min="0.01" max="1000000" step="0.01" required></div></div>
+        <label for="date">Service date</label><input id="date" type="date" value="2026-09-01" required>
+        <label for="scenario">Integration scenario</label><select id="scenario"><option value="Normal">Normal · integrates on first attempt</option><option value="Transient">Temporary failure · succeeds on attempt 3</option><option value="Permanent">Permanent failure · dead letter</option><option value="Exhaust">Repeated failure · exhausts 3 attempts</option></select>
+        <p class="hint">Amounts above $5,000 route to manual review after a successful simulated integration. This is a fictional workflow rule.</p>
+        <button class="primary" id="submit" type="submit">Submit claim <span>→</span></button>
+      </form>
+      <div class="secondary-actions"><button id="new-claim" type="button">New claim ID</button><button id="duplicate" type="button" disabled>Resend last submission</button></div>
+      <p id="notice" role="status" aria-live="polite"></p>
+    </section>
+    <section class="panel queue"><div class="section-label">02 / PROCESSING</div><div class="row"><h2>Claims queue</h2><span class="live"><i></i> Refreshes every 2s</span></div><p class="muted">Latest 200 claims. Select a row to inspect its event and audit history.</p>
+      <div class="table-wrap"><table><thead><tr><th>Claim / member</th><th>Amount</th><th>Status</th><th>Attempts</th></tr></thead><tbody id="claims"></tbody></table></div>
+      <div id="empty" class="empty"><span>↗</span><h3>Your queue is ready</h3><p>Submit a synthetic claim to watch the processing lifecycle.</p></div>
+      <p id="connection" class="muted" role="status"></p>
+    </section>
+  </div>
+  <section class="panel history"><div class="section-label">03 / TRACEABILITY</div><div class="row"><h2 id="detail-title">Claim audit trail</h2><span id="event-state" class="muted">No claim selected</span></div><div id="audit" class="audit"><p class="muted">Select a claim above to see its processing history.</p></div>
+    <form id="replay-form" hidden><label for="reason">Reason for replay</label><div class="replay-row"><input id="reason" minlength="5" maxlength="300" placeholder="Describe the investigation or recovery action" required><button class="primary" id="replay" type="submit">Replay claim</button></div><p class="hint">Replay preserves the audit trail and resets the attempt counter. The selected failure simulation stays unchanged, so a persistent failure will recur.</p></form>
+  </section>
+  <footer>.NET 10 · SQLite · Transactional event processing<br>Simulated gateway only. No patient records, real payer integration, payment decisions, or production compliance claims.</footer>
+</main>
+</body></html>

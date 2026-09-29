@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Claims.Core/Claims.Core.csproj" />
+  <Project Path="src/Claims.Api/Claims.Api.csproj" />
+  <Project Path="tests/Claims.Tests/Claims.Tests.csproj" />
+</Solution>

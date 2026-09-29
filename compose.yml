@@ -1,0 +1,10 @@
+services:
+  claims:
+    build: .
+    ports:
+      - "127.0.0.1:5080:8080"
+    volumes:
+      - claims-data:/app/data
+    restart: unless-stopped
+volumes:
+  claims-data:
